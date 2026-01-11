@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem E-OPR SK Cherating</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --primary-color: #2c3e50; --secondary-color: #ecf0f1; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        
+        /* Header App */
+        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+        .header-app img { height: 80px; width: auto; }
+        .header-text { text-align: center; flex-grow: 1; }
+        .header-text h2 { margin: 0; color: var(--primary-color); }
+
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        textarea { height: 80px; resize: vertical; }
+        
+        .btn-jana { background-color: #27ae60; color: white; padding: 15px; border: none; border-radius: 5px; width: 100%; font-size: 18px; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        .btn-jana:hover { background-color: #219150; }
+
+        /* Preview PDF Layout (Hidden from screen, shown in PDF) */
+        #pdf-content { display: none; padding: 20px; }
+        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .pdf-table th, .pdf-table td { border: 1px solid black; padding: 8px; text-align: left; vertical-align: top; font-size: 12px; }
+        .pdf-header-table { width: 100%; border: none; margin-bottom: 10px; }
+        .label-cell { background-color: #eeeeee; font-weight: bold; width: 25%; }
+        
+        .image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .image-grid img { width: 100%; height: 150px; object-fit: cover; border: 1px solid #ccc; }
+        
+        @media print {
+            .no-print { display: none; }
+            #pdf-content { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container no-print">
+    <div class="header-app">
+        <img src="LINK_LOGO_SK_HOLY_TRINITY" alt="Logo Sekolah">
+        <div class="header-text">
+            <h2>LAPORAN OPR SK CHERATING</h2>
+        </div>
+        <img src="LINK_LOGO_TS25" alt="Logo TS25">
+    </div>
+
+    <div class="form-group"><label>Nama Program / Aktiviti</label><input type="text" id="progName"></div>
+    <div style="display: flex; gap: 10px;">
+        <div class="form-group" style="flex:1;"><label>Anjuran</label><input type="text" id="anjuran"></div>
+        <div class="form-group" style="flex:1;"><label>Tarikh</label><input type="date" id="tarikh"></div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <div class="form-group" style="flex:1;"><label>Masa</label><input type="text" id="masa"></div>
+        <div class="form-group" style="flex:1;"><label>Tempat</label><input type="text" id="tempat"></div>
+    </div>
+    <div class="form-group"><label>Sasaran</label><input type="text" id="sasaran"></div>
+    <div class="form-group"><label>Objektif</label><textarea id="objektif"></textarea></div>
+    <div class="form-group"><label>Aktiviti</label><textarea id="aktiviti"></textarea></div>
+    <div class="form-group"><label>Kekuatan</label><textarea id="kekuatan"></textarea></div>
+    <div class="form-group"><label>Kelemahan</label><textarea id="kelemahan"></textarea></div>
+    
+    <div class="form-group">
+        <label>Muat Naik Gambar (Maks 6)</label>
+        <input type="file" id="imageInput" accept="image/*" multiple onchange="previewImages()">
+    </div>
+
+    <button class="btn-jana" onclick="generatePDF()">JANA PDF</button>
+</div>
+
+<div id="pdf-content">
+    <table class="pdf-header-table">
+        <tr>
+            <td style="width: 20%;"><img src="LINK_LOGO_SK_HOLY_TRINITY" style="height: 70px;"></td>
+            <td style="text-align: center;">
+                <h2 style="margin:0;">LAPORAN ONE PAGE REPORT (OPR)</h2>
+                <h3 style="margin:5px 0;">SK CHERATING</h3>
+            </td>
+            <td style="width: 20%; text-align: right;"><img src="LINK_LOGO_TS25" style="height: 70px;"></td>
+        </tr>
+    </table>
+
+    <table class="pdf-table">
+        <tr><td class="label-cell">Nama Program</td><td id="p_progName" colspan="3"></td></tr>
+        <tr>
+            <td class="label-cell">Anjuran</td><td id="p_anjuran"></td>
+            <td class="label-cell">Tarikh</td><td id="p_tarikh"></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Masa</td><td id="p_masa"></td>
+            <td class="label-cell">Tempat</td><td id="p_tempat"></td>
+        </tr>
+        <tr><td class="label-cell">Sasaran</td><td id="p_sasaran" colspan="3"></td></tr>
+        <tr><td class="label-cell">Objektif</td><td id="p_objektif" colspan="3"></td></tr>
+        <tr><td class="label-cell">Ringkasan Aktiviti</td><td id="p_aktiviti" colspan="3"></td></tr>
+        <tr><td class="label-cell">Kekuatan</td><td id="p_kekuatan" colspan="3"></td></tr>
+        <tr><td class="label-cell">Kelemahan</td><td id="p_kelemahan" colspan="3"></td></tr>
+    </table>
+
+    <div class="image-grid" id="p_images"></div>
+</div>
+
+<script>
+    function previewImages() {
+        const files = document.getElementById('imageInput').files;
+        if (files.length > 6) {
+            alert("Maksimum 6 gambar sahaja.");
+            document.getElementById('imageInput').value = "";
+        }
+    }
+
+    function generatePDF() {
+        // Map data dari form ke template PDF
+        const fields = ['progName', 'anjuran', 'tarikh', 'masa', 'tempat', 'sasaran', 'objektif', 'aktiviti', 'kekuatan', 'kelemahan'];
+        fields.forEach(f => {
+            document.getElementById('p_' + f).innerText = document.getElementById(f).value;
+        });
+
+        // Handle Gambar
+        const imageGrid = document.getElementById('p_images');
+        imageGrid.innerHTML = '';
+        const files = document.getElementById('imageInput').files;
+        
+        let loaded = 0;
+        if (files.length === 0) {
+            proceedToPDF();
+        } else {
+            Array.from(files).slice(0, 6).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imageGrid.appendChild(img);
+                    loaded++;
+                    if (loaded === Math.min(files.length, 6)) proceedToPDF();
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function proceedToPDF() {
+            const element = document.getElementById('pdf-content');
+            element.style.display = 'block';
+            
+            const opt = {
+                margin: 10,
+                filename: 'Laporan_OPR_' + document.getElementById('progName').value + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
