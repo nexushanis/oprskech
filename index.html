@@ -10,40 +10,48 @@
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #e3e6e8; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        /* Header */
+        /* Header Screen */
         .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--primary); padding-bottom: 20px; margin-bottom: 25px; }
         .header img { height: 80px; width: auto; }
         .header h1 { color: var(--primary); font-size: 24px; text-align: center; flex-grow: 1; margin: 0 10px; text-transform: uppercase; }
 
-        /* Form Elements */
+        /* Form */
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; }
         input[type="text"], input[type="date"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
         textarea { height: 80px; resize: vertical; }
-        
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
 
-        /* Upload Grid Styling */
+        /* Upload Section */
         .upload-section { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px dashed #aaa; margin-top: 20px; }
-        .upload-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-        .upload-box { background: white; padding: 10px; border: 1px solid #ddd; text-align: center; border-radius: 5px; }
-        .upload-box input { font-size: 12px; width: 100%; margin-bottom: 5px; }
-        .preview-img { width: 100%; height: 100px; object-fit: cover; background: #eee; border: 1px solid #ccc; display: block; margin-top: 5px; }
+        .upload-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+        .upload-box { background: white; padding: 5px; border: 1px solid #ddd; text-align: center; border-radius: 5px; overflow: hidden;}
+        .upload-box input { font-size: 10px; width: 100%; margin-bottom: 5px; }
+        .preview-img { width: 100%; height: 80px; object-fit: cover; background: #eee; border: 1px solid #ccc; display: block; }
 
         .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 18px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 30px; transition: 0.2s; }
         .btn-submit:hover { background: #0d1560; }
 
-        /* PDF HIDDEN TEMPLATE */
-        #pdf-output { display: none; padding: 20px; background: white; width: 100%; } /* Papar bila print */
-        
-        /* PDF Specific Styles */
-        .pdf-tbl { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; font-family: Arial, sans-serif; }
-        .pdf-tbl td, .pdf-tbl th { border: 1px solid #000; padding: 6px 8px; vertical-align: top; }
-        .bg-gray { background-color: #f0f0f0; font-weight: bold; width: 25%; }
+        /* --- BAHAGIAN PDF TEMPLATE (RAHSIA) --- */
+        /* Kita letak di luar skrin (-9999px) supaya tak nampak tapi wujud */
+        #pdf-output {
+            position: absolute;
+            left: -9999px; 
+            top: 0;
+            width: 210mm; /* Lebar A4 */
+            padding: 10mm;
+            background: white;
+            color: black;
+        }
+
+        /* PDF Styles */
+        .pdf-tbl { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11pt; font-family: Arial, sans-serif; }
+        .pdf-tbl td, .pdf-tbl th { border: 1px solid #000; padding: 5px; vertical-align: top; }
+        .bg-gray { background-color: #dcdcdc; font-weight: bold; width: 25%; }
         
         .pdf-img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .pdf-photo { width: 100%; height: 160px; object-fit: cover; border: 1px solid #000; display: none; } /* Default hidden until src loaded */
+        .pdf-photo { width: 100%; height: 160px; object-fit: cover; border: 1px solid #000; display: none; } /* Default hidden */
 
         @media (max-width: 600px) {
             .row { flex-direction: column; }
@@ -54,25 +62,22 @@
 </head>
 <body>
 
-<div class="container" id="app-container">
+<div class="container">
     <div class="header">
-        <img src="LINK_LOGO_SK_HOLY_TRINITY" alt="Logo Sekolah">
+        <img src="logo_sekolah.png" alt="Logo Sekolah" onerror="this.src='https://via.placeholder.com/100?text=Logo+Sekolah'">
         <h1>Laporan OPR SK Cherating</h1>
-        <img src="LINK_LOGO_TS25" alt="TS25">
+        <img src="logo_ts25.png" alt="TS25" onerror="this.src='https://via.placeholder.com/100?text=Logo+TS25'">
     </div>
 
     <div class="form-group"><label>Nama Program / Aktiviti</label><input type="text" id="in_nama"></div>
-    
     <div class="row">
         <div class="col"><label>Anjuran</label><input type="text" id="in_anjuran"></div>
         <div class="col"><label>Tarikh</label><input type="date" id="in_tarikh"></div>
     </div>
-
     <div class="row">
         <div class="col"><label>Masa</label><input type="text" id="in_masa"></div>
         <div class="col"><label>Tempat</label><input type="text" id="in_tempat"></div>
     </div>
-
     <div class="form-group"><label>Sasaran</label><input type="text" id="in_sasaran"></div>
     <div class="form-group"><label>Objektif</label><textarea id="in_objektif"></textarea></div>
     <div class="form-group"><label>Aktiviti</label><textarea id="in_aktiviti"></textarea></div>
@@ -80,38 +85,14 @@
     <div class="form-group"><label>Kelemahan</label><textarea id="in_kelemahan"></textarea></div>
 
     <div class="upload-section">
-        <label>Muat Naik Gambar Laporan (Isi ikut urutan 1-6)</label>
+        <label>Muat Naik Gambar (1-6)</label>
         <div class="upload-grid">
-            <div class="upload-box">
-                <label>Gbr 1</label>
-                <input type="file" onchange="previewFile(this, 'prev1')">
-                <img id="prev1" class="preview-img">
-            </div>
-            <div class="upload-box">
-                <label>Gbr 2</label>
-                <input type="file" onchange="previewFile(this, 'prev2')">
-                <img id="prev2" class="preview-img">
-            </div>
-            <div class="upload-box">
-                <label>Gbr 3</label>
-                <input type="file" onchange="previewFile(this, 'prev3')">
-                <img id="prev3" class="preview-img">
-            </div>
-            <div class="upload-box">
-                <label>Gbr 4</label>
-                <input type="file" onchange="previewFile(this, 'prev4')">
-                <img id="prev4" class="preview-img">
-            </div>
-            <div class="upload-box">
-                <label>Gbr 5</label>
-                <input type="file" onchange="previewFile(this, 'prev5')">
-                <img id="prev5" class="preview-img">
-            </div>
-            <div class="upload-box">
-                <label>Gbr 6</label>
-                <input type="file" onchange="previewFile(this, 'prev6')">
-                <img id="prev6" class="preview-img">
-            </div>
+            <div class="upload-box"><label>1</label><input type="file" onchange="previewFile(this, 'prev1')"><img id="prev1" class="preview-img"></div>
+            <div class="upload-box"><label>2</label><input type="file" onchange="previewFile(this, 'prev2')"><img id="prev2" class="preview-img"></div>
+            <div class="upload-box"><label>3</label><input type="file" onchange="previewFile(this, 'prev3')"><img id="prev3" class="preview-img"></div>
+            <div class="upload-box"><label>4</label><input type="file" onchange="previewFile(this, 'prev4')"><img id="prev4" class="preview-img"></div>
+            <div class="upload-box"><label>5</label><input type="file" onchange="previewFile(this, 'prev5')"><img id="prev5" class="preview-img"></div>
+            <div class="upload-box"><label>6</label><input type="file" onchange="previewFile(this, 'prev6')"><img id="prev6" class="preview-img"></div>
         </div>
     </div>
 
@@ -119,27 +100,25 @@
 </div>
 
 <div id="pdf-output">
-    <table style="width: 100%; border: none; margin-bottom: 10px;">
+    <table style="width: 100%; border: none; margin-bottom: 5px;">
         <tr>
-            <td style="width: 15%; border: none;"><img src="LINK_LOGO_SK_HOLY_TRINITY" style="height: 70px;"></td>
-            <td style="text-align: center; border: none;">
-                <h2 style="margin:0; font-size: 18px;">LAPORAN ONE PAGE REPORT (OPR)</h2>
-                <h3 style="margin:5px 0; font-size: 16px;">SK CHERATING</h3>
+            <td style="width: 15%; border: none; text-align: left;">
+                <img src="logo_sekolah.png" style="height: 70px;" onerror="this.style.display='none'">
             </td>
-            <td style="width: 15%; text-align: right; border: none;"><img src="LINK_LOGO_TS25" style="height: 70px;"></td>
+            <td style="text-align: center; border: none;">
+                <h2 style="margin:0; font-size: 16pt;">LAPORAN ONE PAGE REPORT (OPR)</h2>
+                <h3 style="margin:5px 0; font-size: 14pt;">SK CHERATING</h3>
+            </td>
+            <td style="width: 15%; border: none; text-align: right;">
+                <img src="logo_ts25.png" style="height: 70px;" onerror="this.style.display='none'">
+            </td>
         </tr>
     </table>
 
     <table class="pdf-tbl">
         <tr><td class="bg-gray">Nama Program</td><td id="out_nama" colspan="3"></td></tr>
-        <tr>
-            <td class="bg-gray">Anjuran</td><td id="out_anjuran"></td>
-            <td class="bg-gray">Tarikh</td><td id="out_tarikh"></td>
-        </tr>
-        <tr>
-            <td class="bg-gray">Masa</td><td id="out_masa"></td>
-            <td class="bg-gray">Tempat</td><td id="out_tempat"></td>
-        </tr>
+        <tr><td class="bg-gray">Anjuran</td><td id="out_anjuran"></td><td class="bg-gray">Tarikh</td><td id="out_tarikh"></td></tr>
+        <tr><td class="bg-gray">Masa</td><td id="out_masa"></td><td class="bg-gray">Tempat</td><td id="out_tempat"></td></tr>
         <tr><td class="bg-gray">Sasaran</td><td id="out_sasaran" colspan="3"></td></tr>
         <tr><td class="bg-gray">Objektif</td><td id="out_objektif" colspan="3"></td></tr>
         <tr><td class="bg-gray">Ringkasan Aktiviti</td><td id="out_aktiviti" colspan="3"></td></tr>
@@ -148,63 +127,48 @@
     </table>
 
     <div class="pdf-img-grid">
-        <img id="pdf_img1" class="pdf-photo">
-        <img id="pdf_img2" class="pdf-photo">
-        <img id="pdf_img3" class="pdf-photo">
-        <img id="pdf_img4" class="pdf-photo">
-        <img id="pdf_img5" class="pdf-photo">
-        <img id="pdf_img6" class="pdf-photo">
+        <img id="pdf_img1" class="pdf-photo"><img id="pdf_img2" class="pdf-photo"><img id="pdf_img3" class="pdf-photo">
+        <img id="pdf_img4" class="pdf-photo"><img id="pdf_img5" class="pdf-photo"><img id="pdf_img6" class="pdf-photo">
     </div>
 </div>
 
 <script>
-    // Fungsi Preview Gambar serta merta
     function previewFile(input, previewId) {
         const file = input.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById(previewId).src = e.target.result;
-            }
+            reader.onload = e => document.getElementById(previewId).src = e.target.result;
             reader.readAsDataURL(file);
         }
     }
 
     function janaPDF() {
-        // 1. Pindahkan data teks
+        // Pindahkan Data
         const ids = ['nama', 'anjuran', 'tarikh', 'masa', 'tempat', 'sasaran', 'objektif', 'aktiviti', 'kekuatan', 'kelemahan'];
         ids.forEach(id => {
             document.getElementById('out_' + id).innerText = document.getElementById('in_' + id).value;
         });
 
-        // 2. Pindahkan gambar dari Preview ke Template PDF
+        // Pindahkan Gambar
         for (let i = 1; i <= 6; i++) {
-            const previewSrc = document.getElementById('prev' + i).getAttribute('src');
-            const pdfImg = document.getElementById('pdf_img' + i);
-            
-            if (previewSrc) {
-                pdfImg.src = previewSrc;
-                pdfImg.style.display = 'block'; // Tunjuk jika ada gambar
-            } else {
-                pdfImg.style.display = 'none'; // Sorok jika tiada
-            }
+            const src = document.getElementById('prev' + i).getAttribute('src');
+            const target = document.getElementById('pdf_img' + i);
+            if (src) { target.src = src; target.style.display = 'block'; }
+            else { target.style.display = 'none'; }
         }
 
-        // 3. Jana PDF
+        // Jana PDF
         const element = document.getElementById('pdf-output');
-        element.style.display = 'block'; // Tunjuk sekejap untuk capture
-        
         const opt = {
             margin: 10,
-            filename: 'Laporan_OPR_' + document.getElementById('in_nama').value + '.pdf',
+            filename: 'Laporan_OPR.pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true }, // useCORS penting untuk gambar
+            html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        html2pdf().set(opt).from(element).save().then(() => {
-            element.style.display = 'none'; // Sorok semula lepas siap
-        });
+        // Guna promise untuk pastikan render selesai
+        html2pdf().set(opt).from(element).save();
     }
 </script>
 
