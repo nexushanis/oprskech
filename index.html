@@ -4,220 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-OPR SK Cherating</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #eef2f3; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        /* --- DESIGN UNTUK SKRIN (PHONE/LAPTOP) --- */
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* HEADER APP */
-        .app-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
-        .app-header h1 { margin: 0; color: #1a237e; font-size: 24px; }
-        .app-header p { margin: 5px 0; color: #666; font-size: 14px; }
+        h1 { text-align: center; color: #2c3e50; }
+        .note { background: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; font-size: 13px; margin-bottom: 20px; text-align: center; }
 
-        /* FORM */
-        label { display: block; font-weight: bold; margin-top: 10px; font-size: 14px; }
-        input, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        textarea { height: 70px; resize: vertical; }
+        label { display: block; font-weight: bold; margin-top: 10px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        textarea { height: 80px; }
+
+        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .upload-box { border: 1px dashed #ccc; padding: 5px; text-align: center; background: #fafafa; }
+        .upload-box img { width: 100%; height: 60px; object-fit: cover; display: none; margin-top: 5px; }
         
-        /* UPLOAD GRID */
-        .upload-area { background: #f9f9f9; padding: 15px; margin-top: 15px; border-radius: 5px; border: 1px dashed #999; }
-        .grid-upload { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .upload-box { text-align: center; background: #fff; padding: 5px; border: 1px solid #ddd; }
-        .upload-box img { width: 100%; height: 80px; object-fit: cover; display: none; margin-top: 5px; background: #eee; }
-        .upload-box input { font-size: 10px; }
-
-        /* BUTTONS */
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .btn-preview { background: #2980b9; }
-        .btn-download { background: #27ae60; display: none; } /* Sorok dulu butang download */
-
-        /* PREVIEW AREA (KERTAS A4) */
-        #preview-section {
-            display: none; /* Sorok masa mula */
-            margin-top: 30px;
-            background: #525659;
-            padding: 20px;
-            text-align: center;
-        }
+        .btn-jana { background: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 20px; cursor: pointer; }
         
-        #paper-content {
-            background: white;
-            width: 210mm;
-            min-height: 297mm;
-            margin: auto;
-            padding: 15mm;
-            box-sizing: border-box;
-            text-align: left;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            color: black;
-        }
+        /* --- DESIGN KHAS UNTUK CETAKAN (PDF) --- */
+        /* Bahagian ini disorok di skrin biasa, tapi muncul bila tekan print */
+        #laporan-output { display: none; }
 
-        /* FORMAT TABEL LAPORAN (Sama macam kerajaan) */
-        .header-table { width: 100%; border: none; margin-bottom: 10px; }
-        .header-table td { vertical-align: middle; }
-        .opr-table { width: 100%; border-collapse: collapse; font-size: 11pt; font-family: Arial, sans-serif; }
-        .opr-table td { border: 1px solid #000; padding: 5px 8px; vertical-align: top; }
-        .bg-head { background-color: #e0e0e0; font-weight: bold; width: 25%; }
-        
-        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .photo-frame { width: 100%; height: 160px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f0f0f0; }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        @media print {
+            body * { visibility: hidden; } /* Sorok semua benda lain */
+            .container { display: none; } /* Sorok borang */
+            
+            #laporan-output, #laporan-output * { 
+                visibility: visible; /* Tunjuk laporan sahaja */
+            }
+            
+            #laporan-output {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 20px;
+                background: white;
+            }
 
-        @media screen and (max-width: 600px) {
-            .grid-upload { grid-template-columns: repeat(2, 1fr); }
-            #paper-content { width: 100%; padding: 10px; zoom: 0.5; } /* Kecilkan preview di phone */
+            /* Format Table PDF */
+            table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12pt; }
+            td, th { border: 1px solid black; padding: 8px; vertical-align: top; }
+            .label-col { background-color: #eee; font-weight: bold; width: 25%; }
+            
+            /* Grid Gambar PDF */
+            .pdf-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+            .pdf-img-box { height: 180px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+            .pdf-img-box img { width: 100%; height: 100%; object-fit: cover; }
+            
+            /* Hilangkan header/footer browser (tarikh/url) jika boleh */
+            @page { margin: 10mm; size: A4; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="app-header">
-        <h1>SISTEM OPR CIKGU</h1>
-        <p>Isi borang &rarr; Klik 'Lihat Laporan' &rarr; Download PDF</p>
+    <h1>Sistem OPR SK Cherating</h1>
+    <div class="note">
+        <strong>PENTING:</strong> Selepas tekan butang JANA, browser akan membuka paparan cetak. <br>
+        Sila pilih <strong>"Save as PDF"</strong> atau <strong>"Simpan sebagai PDF"</strong> pada pilihan printer.
     </div>
 
-    <div>
-        <label>Nama Program</label><input type="text" id="in_nama" placeholder="Contoh: Sambutan Hari Guru">
-        
-        <div style="display:flex; gap:10px;">
-            <div style="flex:1"><label>Anjuran</label><input type="text" id="in_anjuran"></div>
-            <div style="flex:1"><label>Tarikh</label><input type="date" id="in_tarikh"></div>
-        </div>
-        
-        <div style="display:flex; gap:10px;">
-            <div style="flex:1"><label>Masa</label><input type="text" id="in_masa"></div>
-            <div style="flex:1"><label>Tempat</label><input type="text" id="in_tempat"></div>
-        </div>
-
-        <label>Sasaran</label><input type="text" id="in_sasaran">
-        <label>Objektif</label><textarea id="in_objektif"></textarea>
-        <label>Aktiviti</label><textarea id="in_aktiviti"></textarea>
-        <label>Kekuatan</label><textarea id="in_kekuatan"></textarea>
-        <label>Kelemahan</label><textarea id="in_kelemahan"></textarea>
-
-        <div class="upload-area">
-            <label style="margin-bottom:10px;">Muat Naik 6 Gambar (Wajib isi ikut urutan)</label>
-            <div class="grid-upload">
-                <div class="upload-box"><input type="file" onchange="readImg(this, 1)"><img id="thumb1"></div>
-                <div class="upload-box"><input type="file" onchange="readImg(this, 2)"><img id="thumb2"></div>
-                <div class="upload-box"><input type="file" onchange="readImg(this, 3)"><img id="thumb3"></div>
-                <div class="upload-box"><input type="file" onchange="readImg(this, 4)"><img id="thumb4"></div>
-                <div class="upload-box"><input type="file" onchange="readImg(this, 5)"><img id="thumb5"></div>
-                <div class="upload-box"><input type="file" onchange="readImg(this, 6)"><img id="thumb6"></div>
-            </div>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn btn-preview" onclick="paparLaporan()">1. LIHAT LAPORAN DULU</button>
-            <button class="btn btn-download" id="btnDownload" onclick="downloadPDF()">2. DOWNLOAD PDF</button>
-        </div>
+    <div style="text-align:center; margin-bottom:20px;">
+        <img src="logo_sekolah.png" height="50" alt="Logo Sekolah" onerror="this.style.display='none'">
+        <img src="logo_ts25.png" height="50" alt="Logo TS25" onerror="this.style.display='none'">
     </div>
+
+    <label>Nama Program</label><input type="text" id="in_nama">
+    <div style="display:flex; gap:10px;">
+        <div style="flex:1"><label>Anjuran</label><input type="text" id="in_anjuran"></div>
+        <div style="flex:1"><label>Tarikh</label><input type="date" id="in_tarikh"></div>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <div style="flex:1"><label>Masa</label><input type="text" id="in_masa"></div>
+        <div style="flex:1"><label>Tempat</label><input type="text" id="in_tempat"></div>
+    </div>
+    <label>Sasaran</label><input type="text" id="in_sasaran">
+    <label>Objektif</label><textarea id="in_objektif"></textarea>
+    <label>Aktiviti</label><textarea id="in_aktiviti"></textarea>
+    <label>Kekuatan</label><textarea id="in_kekuatan"></textarea>
+    <label>Kelemahan</label><textarea id="in_kelemahan"></textarea>
+
+    <label>Muat Naik Gambar (1-6)</label>
+    <div class="upload-grid">
+        <div class="upload-box"><input type="file" onchange="preview(this, 1)"><img id="prev1"></div>
+        <div class="upload-box"><input type="file" onchange="preview(this, 2)"><img id="prev2"></div>
+        <div class="upload-box"><input type="file" onchange="preview(this, 3)"><img id="prev3"></div>
+        <div class="upload-box"><input type="file" onchange="preview(this, 4)"><img id="prev4"></div>
+        <div class="upload-box"><input type="file" onchange="preview(this, 5)"><img id="prev5"></div>
+        <div class="upload-box"><input type="file" onchange="preview(this, 6)"><img id="prev6"></div>
+    </div>
+
+    <button class="btn-jana" onclick="cetakPDF()">JANA & SIMPAN PDF</button>
 </div>
 
-<div id="preview-section">
-    <h3 style="color:white; margin-top:0;">Preview (Ini yang akan dicetak)</h3>
-    
-    <div id="paper-content">
-        <table class="header-table">
-            <tr>
-                <td style="width: 15%;">
-                    <img src="logo_sekolah.png" style="height:80px;" onerror="this.style.opacity=0">
-                </td>
-                <td style="text-align: center;">
-                    <h2 style="margin:0; text-transform:uppercase;">LAPORAN ONE PAGE REPORT (OPR)</h2>
-                    <h3 style="margin:5px 0;">SK CHERATING</h3>
-                </td>
-                <td style="width: 15%; text-align: right;">
-                    <img src="logo_ts25.png" style="height:80px;" onerror="this.style.opacity=0">
-                </td>
-            </tr>
-        </table>
+<div id="laporan-output">
+    <table style="border:none; margin-bottom:10px;">
+        <tr style="border:none;">
+            <td style="border:none; width:20%;"><img src="logo_sekolah.png" style="height:80px;" onerror="this.style.display='none'"></td>
+            <td style="border:none; text-align:center;">
+                <h2 style="margin:0;">LAPORAN ONE PAGE REPORT (OPR)</h2>
+                <h3 style="margin:5px 0;">SK CHERATING</h3>
+            </td>
+            <td style="border:none; width:20%; text-align:right;"><img src="logo_ts25.png" style="height:80px;" onerror="this.style.display='none'"></td>
+        </tr>
+    </table>
 
-        <table class="opr-table">
-            <tr><td class="bg-head">Nama Program</td><td id="out_nama" colspan="3"></td></tr>
-            <tr>
-                <td class="bg-head">Anjuran</td><td id="out_anjuran"></td>
-                <td class="bg-head">Tarikh</td><td id="out_tarikh"></td>
-            </tr>
-            <tr>
-                <td class="bg-head">Masa</td><td id="out_masa"></td>
-                <td class="bg-head">Tempat</td><td id="out_tempat"></td>
-            </tr>
-            <tr><td class="bg-head">Sasaran</td><td id="out_sasaran" colspan="3"></td></tr>
-            <tr><td class="bg-head">Objektif</td><td id="out_objektif" colspan="3"></td></tr>
-            <tr><td class="bg-head">Ringkasan Aktiviti</td><td id="out_aktiviti" colspan="3"></td></tr>
-            <tr><td class="bg-head">Kekuatan</td><td id="out_kekuatan" colspan="3"></td></tr>
-            <tr><td class="bg-head">Kelemahan</td><td id="out_kelemahan" colspan="3"></td></tr>
-        </table>
+    <table>
+        <tr><td class="label-col">Nama Program</td><td id="out_nama" colspan="3"></td></tr>
+        <tr>
+            <td class="label-col">Anjuran</td><td id="out_anjuran"></td>
+            <td class="label-col">Tarikh</td><td id="out_tarikh"></td>
+        </tr>
+        <tr>
+            <td class="label-col">Masa</td><td id="out_masa"></td>
+            <td class="label-col">Tempat</td><td id="out_tempat"></td>
+        </tr>
+        <tr><td class="label-col">Sasaran</td><td id="out_sasaran" colspan="3"></td></tr>
+        <tr><td class="label-col">Objektif</td><td id="out_objektif" colspan="3"></td></tr>
+        <tr><td class="label-col">Ringkasan Aktiviti</td><td id="out_aktiviti" colspan="3"></td></tr>
+        <tr><td class="label-col">Kekuatan</td><td id="out_kekuatan" colspan="3"></td></tr>
+        <tr><td class="label-col">Kelemahan</td><td id="out_kelemahan" colspan="3"></td></tr>
+    </table>
 
-        <div class="photo-grid">
-            <div class="photo-frame" id="box_img1">Tiada Gambar</div>
-            <div class="photo-frame" id="box_img2">Tiada Gambar</div>
-            <div class="photo-frame" id="box_img3">Tiada Gambar</div>
-            <div class="photo-frame" id="box_img4">Tiada Gambar</div>
-            <div class="photo-frame" id="box_img5">Tiada Gambar</div>
-            <div class="photo-frame" id="box_img6">Tiada Gambar</div>
-        </div>
+    <div class="pdf-images">
+        <div class="pdf-img-box" id="box1"></div>
+        <div class="pdf-img-box" id="box2"></div>
+        <div class="pdf-img-box" id="box3"></div>
+        <div class="pdf-img-box" id="box4"></div>
+        <div class="pdf-img-box" id="box5"></div>
+        <div class="pdf-img-box" id="box6"></div>
     </div>
 </div>
 
 <script>
-    // 1. Fungsi Baca Gambar (Preview Kecil)
-    function readImg(input, index) {
+    // Fungsi Preview Gambar
+    function preview(input, index) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-                // Papar di kotak upload kecil
-                var thumb = document.getElementById('thumb' + index);
-                thumb.src = e.target.result;
-                thumb.style.display = 'block';
-
-                // Simpan terus ke dalam Kertas Laporan (Preview Besar)
-                var box = document.getElementById('box_img' + index);
-                box.innerHTML = '<img src="'+e.target.result+'">';
-            };
+                // Tunjuk di borang kecil
+                document.getElementById('prev' + index).src = e.target.result;
+                document.getElementById('prev' + index).style.display = 'block';
+                
+                // Masukkan siap-siap ke template PDF
+                document.getElementById('box' + index).innerHTML = '<img src="'+e.target.result+'">';
+            }
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    // 2. Fungsi Pindahkan Teks & Tunjuk Laporan
-    function paparLaporan() {
-        // Pindah Data Teks
-        var list = ['nama','anjuran','tarikh','masa','tempat','sasaran','objektif','aktiviti','kekuatan','kelemahan'];
-        list.forEach(item => {
-            document.getElementById('out_' + item).innerText = document.getElementById('in_' + item).value;
+    // Fungsi Cetak
+    function cetakPDF() {
+        // 1. Pindahkan tulisan dari borang ke laporan
+        var fields = ['nama', 'anjuran', 'tarikh', 'masa', 'tempat', 'sasaran', 'objektif', 'aktiviti', 'kekuatan', 'kelemahan'];
+        fields.forEach(id => {
+            document.getElementById('out_' + id).innerText = document.getElementById('in_' + id).value;
         });
 
-        // Buka bahagian Preview
-        document.getElementById('preview-section').style.display = 'block';
-        document.getElementById('btnDownload').style.display = 'block';
-        
-        // Scroll ke bawah supaya cikgu nampak
-        document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 3. Fungsi Jana PDF
-    function downloadPDF() {
-        // Beritahu pengguna sistem sedang bekerja
-        alert("Sedang memproses PDF... Sila tunggu sebentar.");
-
-        var element = document.getElementById('paper-content');
-        var opt = {
-            margin: 0,
-            filename: 'Laporan_' + document.getElementById('in_nama').value + '.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        // Jana PDF
-        html2pdf().set(opt).from(element).save().then(function(){
-            alert("Siap! PDF anda sedang dimuat turun.");
-        }).catch(function(err){
-            alert("Ralat: " + err);
-        });
+        // 2. Arahkan browser untuk print
+        window.print();
     }
 </script>
 
