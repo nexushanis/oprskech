@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPR SK Cherating (1 Page Fix)</title>
+    <title>OPR SK Cherating (Siap Tandatangan)</title>
     <style>
         /* --- PAPARAN SKRIN (Borang) --- */
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #dfe6e9; margin: 0; padding: 20px; }
@@ -11,18 +11,21 @@
         
         h1 { text-align: center; color: #2d3436; margin-bottom: 5px; font-size: 20px; }
         .note { background: #ffeaa7; color: #d63031; padding: 10px; border-radius: 5px; font-size: 13px; text-align: center; border: 1px solid #fdcb6e; margin-bottom: 20px; }
-
-        label { display: block; font-weight: bold; margin-top: 10px; font-size: 14px; }
+        
+        /* Form Styles */
+        label { display: block; font-weight: bold; margin-top: 10px; font-size: 14px; color: #2d3436; }
         input, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #b2bec3; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
         textarea { height: 60px; resize: none; }
+        
+        .section-title { margin-top: 20px; padding-bottom: 5px; border-bottom: 2px solid #eee; font-weight: bold; color: #0984e3; }
 
-        /* Grid Gambar (Input) */
+        /* Grid Gambar Input */
         .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         .upload-box { border: 2px dashed #b2bec3; padding: 5px; text-align: center; background: #f5f6fa; border-radius: 5px; }
         .upload-box input { font-size: 10px; width: 100%; }
         .upload-box img { width: 100%; height: 60px; object-fit: cover; display: none; margin-top: 5px; border: 1px solid #ddd; }
 
-        .btn-jana { background: #00b894; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        .btn-jana { background: #00b894; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; margin-top: 30px; cursor: pointer; }
         .btn-jana:hover { background: #00a884; }
 
         /* --- PAPARAN CETAK (PDF) --- */
@@ -31,98 +34,117 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm; /* Margin selamat */
+                margin: 10mm; 
             }
 
             html, body {
-                margin: 0;
-                padding: 0;
-                background: white;
-                height: 99%; /* Elak overflow ke page 2 */
-                overflow: hidden; /* Potong page 2 jika ada */
+                margin: 0; padding: 0; background: white;
+                height: 99%; overflow: hidden; /* Elak page 2 */
             }
 
-            /* Sorok elemen skrin */
+            /* Sorok elemen borang */
             .container, .note, h1 { display: none !important; }
 
             /* Papar Laporan */
             #laporan-output {
                 display: block !important;
-                position: absolute;
-                top: 0; left: 0;
-                width: 100%;
-                height: 100%;
+                position: absolute; top: 0; left: 0;
+                width: 100%; height: 100%;
             }
 
             /* 1. Header Logo (TS25 Kiri, Sekolah Kanan) */
             .header-table { width: 100%; border-bottom: 2px solid #000; margin-bottom: 10px; padding-bottom: 5px; }
             .header-table td { border: none !important; vertical-align: middle; }
-            .logo-img { height: 85px; width: auto; object-fit: contain; } /* Saiz logo optimum */
+            .logo-img { height: 80px; width: auto; object-fit: contain; }
 
             /* 2. Jadual Isi Kandungan */
             .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; }
             .content-table td { border: 1px solid black; padding: 5px 8px; vertical-align: top; line-height: 1.3; }
             .label-col { background-color: #f0f0f0 !important; font-weight: bold; width: 20%; -webkit-print-color-adjust: exact; }
 
-            /* 3. Grid Gambar (3 Sahaja) */
+            /* 3. Grid Gambar (3 Sahaja) - Tinggi dikurangkan utk muat tandatangan */
             .pdf-images { 
                 display: grid; 
-                grid-template-columns: repeat(3, 1fr); /* 3 Sebaris */
+                grid-template-columns: repeat(3, 1fr); 
                 gap: 10px; 
                 margin-top: 15px; 
             }
             .pdf-img-box { 
-                height: 180px; /* Tinggi gambar PDF */
+                height: 150px; /* Tinggi dikurangkan sedikit */
                 border: 1px solid #000; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                background: #fff;
-                overflow: hidden;
+                display: flex; align-items: center; justify-content: center; 
+                background: #fff; overflow: hidden;
             }
             .pdf-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+            /* 4. Bahagian Tandatangan */
+            .signature-section {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 25px; /* Jarak dari gambar */
+                font-family: Arial, sans-serif;
+                font-size: 11pt;
+                page-break-inside: avoid;
+            }
+            .sig-box { width: 40%; text-align: center; }
+            .sig-line { margin-top: 40px; margin-bottom: 5px; font-weight: bold; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📝 OPR SK Cherating (Auto A4)</h1>
+    <h1>📝 OPR SK Cherating (Final)</h1>
     <div class="note">
         <strong>PENTING:</strong><br>
-        Bila paparan Print keluar, pastikan:<br>
         1. Paper Size: <strong>A4</strong><br>
-        2. Margins: <strong>Default</strong> atau <strong>None</strong><br>
+        2. Margins: <strong>Default/None</strong><br>
         3. Headers/Footers: <strong>Untick (Buang tanda)</strong>
     </div>
 
-    <div style="text-align:center; margin-bottom:10px; font-size:12px; color:#636e72;">
-        Logo TS25 (Kiri) & Logo Sekolah (Kanan) akan auto-susun bila Print.
-    </div>
-
+    <div class="section-title">Maklumat Program</div>
     <label>Nama Program</label><input type="text" id="in_nama">
+    
     <div style="display:flex; gap:10px;">
         <div style="flex:1"><label>Anjuran</label><input type="text" id="in_anjuran"></div>
         <div style="flex:1"><label>Tarikh</label><input type="date" id="in_tarikh"></div>
     </div>
+    
     <div style="display:flex; gap:10px;">
         <div style="flex:1"><label>Masa</label><input type="text" id="in_masa"></div>
         <div style="flex:1"><label>Tempat</label><input type="text" id="in_tempat"></div>
     </div>
+    
     <label>Sasaran</label><input type="text" id="in_sasaran">
     <label>Objektif</label><textarea id="in_objektif"></textarea>
     <label>Ringkasan Aktiviti</label><textarea id="in_aktiviti"></textarea>
     <label>Kekuatan</label><textarea id="in_kekuatan"></textarea>
     <label>Kelemahan</label><textarea id="in_kelemahan"></textarea>
 
-    <label>Muat Naik 3 Gambar Laporan</label>
+    <div class="section-title">Gambar Laporan (Maksimum 3)</div>
     <div class="upload-grid">
         <div class="upload-box"><input type="file" onchange="preview(this, 1)"><img id="prev1"></div>
         <div class="upload-box"><input type="file" onchange="preview(this, 2)"><img id="prev2"></div>
         <div class="upload-box"><input type="file" onchange="preview(this, 3)"><img id="prev3"></div>
     </div>
 
-    <button class="btn-jana" onclick="cetakPDF()">🖨️ JANA PDF (1 MUKA SURAT)</button>
+    <div class="section-title">Pengesahan Laporan</div>
+    <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+            <label>Disediakan Oleh (Nama)</label>
+            <input type="text" id="in_sedia_nama" placeholder="Cth: Ahmad bin Ali">
+            <label>Jawatan</label>
+            <input type="text" id="in_sedia_jawatan" placeholder="Cth: Setiausaha Program">
+        </div>
+        <div style="flex:1">
+            <label>Disahkan Oleh (Nama)</label>
+            <input type="text" id="in_sah_nama" placeholder="Cth: Guru Besar">
+            <label>Jawatan</label>
+            <input type="text" id="in_sah_jawatan" placeholder="Cth: Guru Besar SK Cherating">
+        </div>
+    </div>
+
+    <button class="btn-jana" onclick="cetakPDF()">🖨️ JANA PDF</button>
 </div>
 
 <div id="laporan-output">
@@ -132,12 +154,10 @@
             <td style="width: 20%; text-align: left;">
                 <img src="logo_ts25.png" class="logo-img" alt="TS25" onerror="this.style.display='none'">
             </td>
-            
             <td style="text-align: center;">
                 <h2 style="margin:0; font-size:16pt; text-transform:uppercase;">LAPORAN ONE PAGE REPORT</h2>
                 <h3 style="margin:5px 0 0 0; font-size:14pt;">SK CHERATING</h3>
             </td>
-            
             <td style="width: 20%; text-align: right;">
                 <img src="logo_sekolah.jpg" class="logo-img" alt="Sekolah" onerror="this.style.display='none'">
             </td>
@@ -166,6 +186,23 @@
         <div class="pdf-img-box" id="box2"></div>
         <div class="pdf-img-box" id="box3"></div>
     </div>
+
+    <div class="signature-section">
+        <div class="sig-box">
+            <p>Disediakan oleh,</p>
+            <div style="height:40px;"></div> <p class="sig-line">................................................</p>
+            <p id="out_sedia_nama" style="text-transform: uppercase; font-weight: bold; margin:0;"></p>
+            <p id="out_sedia_jawatan" style="margin:0;"></p>
+        </div>
+
+        <div class="sig-box">
+            <p>Disahkan oleh,</p>
+            <div style="height:40px;"></div> <p class="sig-line">................................................</p>
+            <p id="out_sah_nama" style="text-transform: uppercase; font-weight: bold; margin:0;"></p>
+            <p id="out_sah_jawatan" style="margin:0;"></p>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -182,10 +219,19 @@
     }
 
     function cetakPDF() {
+        // Pindahkan data teks biasa
         var fields = ['nama', 'anjuran', 'tarikh', 'masa', 'tempat', 'sasaran', 'objektif', 'aktiviti', 'kekuatan', 'kelemahan'];
         fields.forEach(id => {
             document.getElementById('out_' + id).innerText = document.getElementById('in_' + id).value;
         });
+
+        // Pindahkan data tandatangan
+        document.getElementById('out_sedia_nama').innerText = "(" + (document.getElementById('in_sedia_nama').value || "                     ") + ")";
+        document.getElementById('out_sedia_jawatan').innerText = document.getElementById('in_sedia_jawatan').value;
+        
+        document.getElementById('out_sah_nama').innerText = "(" + (document.getElementById('in_sah_nama').value || "                     ") + ")";
+        document.getElementById('out_sah_jawatan').innerText = document.getElementById('in_sah_jawatan').value;
+
         window.print();
     }
 </script>
