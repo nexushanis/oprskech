@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPR SK Cherating (Final Logo Fix)</title>
+    <title>OPR SK Cherating (Perfect Fit)</title>
     <style>
-        /* --- PAPARAN SKRIN (BORANG) --- */
+        /* --- PAPARAN SKRIN (BORANG INPUT) --- */
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #dfe6e9; margin: 0; padding: 20px; }
         .container { max-width: 650px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
@@ -24,72 +24,75 @@
         .upload-box input { font-size: 10px; width: 100%; }
         .upload-box img { width: 100%; height: 60px; object-fit: cover; display: none; margin-top: 5px; border: 1px solid #ddd; }
 
-        /* --- KOTAK TANDATANGAN (LUKIS & UPLOAD) --- */
-        .sign-wrapper { 
-            background: #f1f2f6; border: 1px solid #ced6e0; padding: 10px; border-radius: 5px; margin-top: 10px; 
-        }
+        /* Signature UI */
+        .sign-wrapper { background: #f1f2f6; border: 1px solid #ced6e0; padding: 10px; border-radius: 5px; margin-top: 10px; }
         .sign-tabs { display: flex; gap: 10px; margin-bottom: 10px; }
         .tab-btn { flex: 1; padding: 8px; border: none; background: #ddd; cursor: pointer; font-size: 12px; border-radius: 4px; }
         .tab-btn.active { background: #0984e3; color: white; }
         
-        /* Canvas untuk Lukis */
-        canvas.sig-canvas {
-            border: 2px dashed #aaa; background: white; width: 100%; height: 150px; cursor: crosshair; touch-action: none;
-            display: none; /* Default hidden */
-        }
-        
-        /* Input Upload */
-        .file-sig-input { display: none; } /* Default hidden */
+        canvas.sig-canvas { border: 2px dashed #aaa; background: white; width: 100%; height: 150px; cursor: crosshair; touch-action: none; display: none; }
         .clear-btn { background: #d63031; color: white; border: none; padding: 5px 10px; font-size: 11px; margin-top: 5px; border-radius: 3px; cursor: pointer; }
         .btn-jana { background: #00b894; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; margin-top: 30px; cursor: pointer; }
         .btn-jana:hover { background: #00a884; }
 
-        /* --- PAPARAN CETAK (PDF Output) --- */
+        /* --- PAPARAN CETAK (PDF OUTPUT) --- */
         #laporan-output { display: none; }
 
         @media print {
-            @page { size: A4 portrait; margin: 10mm; }
-            html, body { margin: 0; padding: 0; background: white; height: 99%; overflow: hidden; }
+            @page { size: A4 portrait; margin: 10mm; } /* Margin standard */
+            html, body { margin: 0; padding: 0; background: white; height: 99%; overflow: hidden; } /* Cegah overflow */
             .container, .note, h1 { display: none !important; }
 
             #laporan-output { display: block !important; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-            /* Header Table - Fixed Logo Size */
-            .header-table { width: 100%; border-bottom: 2px solid #000; margin-bottom: 10px; padding-bottom: 5px; }
+            /* HEADER: Optimized spacing */
+            .header-table { width: 100%; border-bottom: 2px solid #000; margin-bottom: 5px; padding-bottom: 5px; } /* Jarak dikurangkan */
             .header-table td { border: none !important; vertical-align: middle; }
             
-            /* LOGO SIZE FIX */
-            .logo-cell { width: 20%; text-align: center; } /* Memastikan kotak logo sama besar */
-            .logo-img { 
-                height: 90px; /* Tinggi Tetap untuk kedua-dua logo */
-                width: auto; 
-                max-width: 100%; 
-                object-fit: contain; /* Elak logo herot */
-                display: block;
-                margin: 0 auto; /* Center logo dalam kotak */
+            .logo-cell { width: 20%; text-align: center; }
+            
+            /* LOGO SIZING */
+            .logo-img-school { 
+                height: 90px; /* Logo Sekolah Besar Sikit */
+                width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
+            }
+            .logo-img-ts25 { 
+                height: 80px; /* TS25 DIKECILKAN 10% (80px vs 90px) */
+                width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
             }
 
-            /* Content */
-            .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; }
-            .content-table td { border: 1px solid black; padding: 5px 8px; vertical-align: top; line-height: 1.3; }
+            /* CONTENT TABLE: Compact spacing */
+            .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10.5pt; } /* Font kecil sikit */
+            .content-table td { 
+                border: 1px solid black; 
+                padding: 4px 6px; /* Padding dikurangkan utk jimat ruang */
+                vertical-align: top; 
+                line-height: 1.25; 
+            }
             .label-col { background-color: #f0f0f0 !important; font-weight: bold; width: 20%; -webkit-print-color-adjust: exact; }
 
-            /* Images */
-            .pdf-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-            .pdf-img-box { height: 150px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; background: #fff; overflow: hidden; }
+            /* IMAGES: Height reduced for fit */
+            .pdf-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+            .pdf-img-box { 
+                height: 140px; /* DIKURANGKAN DARI 150px SUPAYA MUAT A4 */
+                border: 1px solid #000; display: flex; align-items: center; justify-content: center; background: #fff; overflow: hidden; 
+            }
             .pdf-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-            /* Signature Section */
-            .signature-section { display: flex; justify-content: space-between; margin-top: 20px; font-family: Arial, sans-serif; font-size: 11pt; page-break-inside: avoid; }
+            /* SIGNATURE SECTION */
+            .signature-section { 
+                display: flex; justify-content: space-between; 
+                margin-top: 15px; /* Jarak dikurangkan */
+                font-family: Arial, sans-serif; font-size: 10.5pt; page-break-inside: avoid; 
+            }
             .sig-box { width: 45%; text-align: center; }
             
-            /* Lokasi Gambar Tandatangan */
             .sig-placeholder {
-                height: 60px; /* Ruang fix untuk sign */
+                height: 55px; /* Ruang sign */
                 display: flex; align-items: flex-end; justify-content: center;
                 margin-bottom: 0px;
             }
-            .sig-img-final { max-height: 55px; max-width: 150px; display: none; } /* Default hidden */
+            .sig-img-final { max-height: 50px; max-width: 140px; display: none; }
 
             .sig-line { margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #000; }
         }
@@ -102,7 +105,7 @@
     <div class="note">
         <strong>PENTING:</strong><br>
         1. Fail Logo: <strong>logo_sekolah.jpg</strong> & <strong>logo_ts25.png</strong><br>
-        2. Boleh <strong>Lukis</strong> atau <strong>Upload</strong> tandatangan.
+        2. Set Print Scale kepada <strong>Default (100%)</strong>.
     </div>
 
     <div class="section-title">1. Maklumat Program</div>
@@ -134,15 +137,14 @@
         <label style="margin-top:0;">DISEDIAKAN OLEH:</label>
         <input type="text" id="in_sedia_nama" placeholder="Nama Pegawai">
         <input type="text" id="in_sedia_jawatan" placeholder="Jawatan">
-        
         <div style="margin-top:10px;">
             <div class="sign-tabs">
-                <button class="tab-btn active" onclick="switchTab('sedia', 'draw')">✍️ Lukis (Touch Screen)</button>
-                <button class="tab-btn" onclick="switchTab('sedia', 'upload')">📁 Upload Gambar</button>
+                <button class="tab-btn active" onclick="switchTab('sedia', 'draw')">✍️ Lukis</button>
+                <button class="tab-btn" onclick="switchTab('sedia', 'upload')">📁 Upload</button>
             </div>
             <div id="area-sedia-draw" style="display:block;">
                 <canvas id="canvas-sedia" class="sig-canvas" width="300" height="150" style="display:block;"></canvas>
-                <button class="clear-btn" onclick="clearCanvas('canvas-sedia')">Padam & Lukis Semula</button>
+                <button class="clear-btn" onclick="clearCanvas('canvas-sedia')">Padam</button>
             </div>
             <div id="area-sedia-upload" style="display:none; text-align:center; padding:10px;">
                 <input type="file" accept="image/*" id="file-sedia" onchange="handleFileSig(this, 'sedia')">
@@ -155,15 +157,14 @@
         <label style="margin-top:0;">DISAHKAN OLEH:</label>
         <input type="text" id="in_sah_nama" placeholder="Nama Pentadbir">
         <input type="text" id="in_sah_jawatan" placeholder="Jawatan">
-        
         <div style="margin-top:10px;">
             <div class="sign-tabs">
-                <button class="tab-btn active" onclick="switchTab('sah', 'draw')">✍️ Lukis (Touch Screen)</button>
-                <button class="tab-btn" onclick="switchTab('sah', 'upload')">📁 Upload Gambar</button>
+                <button class="tab-btn active" onclick="switchTab('sah', 'draw')">✍️ Lukis</button>
+                <button class="tab-btn" onclick="switchTab('sah', 'upload')">📁 Upload</button>
             </div>
             <div id="area-sah-draw" style="display:block;">
                 <canvas id="canvas-sah" class="sig-canvas" width="300" height="150" style="display:block;"></canvas>
-                <button class="clear-btn" onclick="clearCanvas('canvas-sah')">Padam & Lukis Semula</button>
+                <button class="clear-btn" onclick="clearCanvas('canvas-sah')">Padam</button>
             </div>
             <div id="area-sah-upload" style="display:none; text-align:center; padding:10px;">
                 <input type="file" accept="image/*" id="file-sah" onchange="handleFileSig(this, 'sah')">
@@ -179,14 +180,14 @@
     <table class="header-table">
         <tr>
             <td class="logo-cell">
-                <img src="logo_ts25.png" class="logo-img" alt="TS25" onerror="this.style.display='none'">
+                <img src="logo_ts25.png" class="logo-img-ts25" alt="TS25" onerror="this.style.display='none'">
             </td>
             <td style="text-align: center;">
                 <h2 style="margin:0; font-size:16pt; text-transform:uppercase;">LAPORAN ONE PAGE REPORT</h2>
                 <h3 style="margin:5px 0 0 0; font-size:14pt;">SK CHERATING</h3>
             </td>
             <td class="logo-cell">
-                <img src="logo_sekolah.jpg" class="logo-img" alt="Sekolah" onerror="this.style.display='none'">
+                <img src="logo_sekolah.jpg" class="logo-img-school" alt="Sekolah" onerror="this.style.display='none'">
             </td>
         </tr>
     </table>
@@ -211,23 +212,14 @@
     <div class="signature-section">
         <div class="sig-box">
             <p style="margin-bottom:5px;">Disediakan oleh,</p>
-            
-            <div class="sig-placeholder">
-                <img id="out_sig_img_sedia" class="sig-img-final">
-            </div>
-
+            <div class="sig-placeholder"><img id="out_sig_img_sedia" class="sig-img-final"></div>
             <p class="sig-line">................................................</p>
             <p id="out_sedia_nama" style="text-transform: uppercase; font-weight: bold; margin:0;"></p>
             <p id="out_sedia_jawatan" style="margin:0;"></p>
         </div>
-
         <div class="sig-box">
             <p style="margin-bottom:5px;">Disahkan oleh,</p>
-            
-            <div class="sig-placeholder">
-                <img id="out_sig_img_sah" class="sig-img-final">
-            </div>
-
+            <div class="sig-placeholder"><img id="out_sig_img_sah" class="sig-img-final"></div>
             <p class="sig-line">................................................</p>
             <p id="out_sah_nama" style="text-transform: uppercase; font-weight: bold; margin:0;"></p>
             <p id="out_sah_jawatan" style="margin:0;"></p>
@@ -236,112 +228,41 @@
 </div>
 
 <script>
-    // --- 1. SETUP CANVAS LUKISAN ---
+    // JS Logic sama seperti sebelum ini
     function setupCanvas(canvasId) {
         var canvas = document.getElementById(canvasId);
         var ctx = canvas.getContext("2d");
         var drawing = false;
-
-        // Mouse Events
         canvas.addEventListener("mousedown", function(e) { drawing = true; ctx.beginPath(); ctx.moveTo(getPos(e).x, getPos(e).y); });
         canvas.addEventListener("mouseup", function() { drawing = false; });
         canvas.addEventListener("mousemove", function(e) { if(drawing) { ctx.lineTo(getPos(e).x, getPos(e).y); ctx.stroke(); } });
-
-        // Touch Events
-        canvas.addEventListener("touchstart", function(e) { 
-            e.preventDefault(); drawing = true; 
-            var touch = e.touches[0];
-            var mouseEvent = new MouseEvent("mousedown", { clientX: touch.clientX, clientY: touch.clientY });
-            canvas.dispatchEvent(mouseEvent);
-        });
+        canvas.addEventListener("touchstart", function(e) { e.preventDefault(); drawing = true; var touch = e.touches[0]; var mouseEvent = new MouseEvent("mousedown", { clientX: touch.clientX, clientY: touch.clientY }); canvas.dispatchEvent(mouseEvent); });
         canvas.addEventListener("touchend", function() { drawing = false; });
-        canvas.addEventListener("touchmove", function(e) {
-            e.preventDefault(); var touch = e.touches[0];
-            var mouseEvent = new MouseEvent("mousemove", { clientX: touch.clientX, clientY: touch.clientY });
-            canvas.dispatchEvent(mouseEvent);
-        });
-
-        function getPos(e) {
-            var rect = canvas.getBoundingClientRect();
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        }
+        canvas.addEventListener("touchmove", function(e) { e.preventDefault(); var touch = e.touches[0]; var mouseEvent = new MouseEvent("mousemove", { clientX: touch.clientX, clientY: touch.clientY }); canvas.dispatchEvent(mouseEvent); });
+        function getPos(e) { var rect = canvas.getBoundingClientRect(); return { x: e.clientX - rect.left, y: e.clientY - rect.top }; }
     }
-    
-    setupCanvas('canvas-sedia');
-    setupCanvas('canvas-sah');
-
-    function clearCanvas(id) {
-        var canvas = document.getElementById(id);
-        var ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // --- 2. LOGIC SWITCH TABS ---
+    setupCanvas('canvas-sedia'); setupCanvas('canvas-sah');
+    function clearCanvas(id) { var canvas = document.getElementById(id); var ctx = canvas.getContext("2d"); ctx.clearRect(0, 0, canvas.width, canvas.height); }
     var sigMode = { sedia: 'draw', sah: 'draw' };
-
-    function switchTab(role, mode) {
-        sigMode[role] = mode;
-        document.getElementById('area-'+role+'-draw').style.display = (mode === 'draw') ? 'block' : 'none';
-        document.getElementById('area-'+role+'-upload').style.display = (mode === 'upload') ? 'block' : 'none';
-    }
-
-    function handleFileSig(input, role) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var prev = document.getElementById('prev-file-'+role);
-                prev.src = e.target.result;
-                prev.style.display = 'block';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // --- 3. LOGIC PREVIEW GAMBAR ---
-    function preview(input, index) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('prev' + index).src = e.target.result;
-                document.getElementById('prev' + index).style.display = 'block';
-                document.getElementById('box' + index).innerHTML = '<img src="'+e.target.result+'">';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // --- 4. CETAK PDF ---
+    function switchTab(role, mode) { sigMode[role] = mode; document.getElementById('area-'+role+'-draw').style.display = (mode === 'draw') ? 'block' : 'none'; document.getElementById('area-'+role+'-upload').style.display = (mode === 'upload') ? 'block' : 'none'; }
+    function handleFileSig(input, role) { if (input.files && input.files[0]) { var reader = new FileReader(); reader.onload = function(e) { var prev = document.getElementById('prev-file-'+role); prev.src = e.target.result; prev.style.display = 'block'; }; reader.readAsDataURL(input.files[0]); } }
+    function preview(input, index) { if (input.files && input.files[0]) { var reader = new FileReader(); reader.onload = function(e) { document.getElementById('prev' + index).src = e.target.result; document.getElementById('prev' + index).style.display = 'block'; document.getElementById('box' + index).innerHTML = '<img src="'+e.target.result+'">'; }; reader.readAsDataURL(input.files[0]); } }
+    
     function cetakPDF() {
         var fields = ['nama', 'anjuran', 'tarikh', 'masa', 'tempat', 'sasaran', 'objektif', 'aktiviti', 'kekuatan', 'kelemahan'];
         fields.forEach(id => { document.getElementById('out_' + id).innerText = document.getElementById('in_' + id).value; });
-
         document.getElementById('out_sedia_nama').innerText = "(" + (document.getElementById('in_sedia_nama').value || "                     ") + ")";
         document.getElementById('out_sedia_jawatan').innerText = document.getElementById('in_sedia_jawatan').value;
         document.getElementById('out_sah_nama').innerText = "(" + (document.getElementById('in_sah_nama').value || "                     ") + ")";
         document.getElementById('out_sah_jawatan').innerText = document.getElementById('in_sah_jawatan').value;
-
-        processSignature('sedia');
-        processSignature('sah');
-
+        processSignature('sedia'); processSignature('sah');
         window.print();
     }
-
     function processSignature(role) {
-        var outputImg = document.getElementById('out_sig_img_' + role);
-        var finalSrc = "";
-        if (sigMode[role] === 'draw') {
-            var canvas = document.getElementById('canvas-' + role);
-            finalSrc = canvas.toDataURL();
-        } else {
-            var prevFile = document.getElementById('prev-file-' + role);
-            if (prevFile.src && prevFile.style.display !== 'none') finalSrc = prevFile.src;
-        }
-        if (finalSrc && finalSrc !== window.location.href) {
-            outputImg.src = finalSrc;
-            outputImg.style.display = 'block';
-        } else {
-            outputImg.style.display = 'none';
-        }
+        var outputImg = document.getElementById('out_sig_img_' + role); var finalSrc = "";
+        if (sigMode[role] === 'draw') { var canvas = document.getElementById('canvas-' + role); finalSrc = canvas.toDataURL(); } 
+        else { var prevFile = document.getElementById('prev-file-' + role); if (prevFile.src && prevFile.style.display !== 'none') finalSrc = prevFile.src; }
+        if (finalSrc && finalSrc !== window.location.href) { outputImg.src = finalSrc; outputImg.style.display = 'block'; } else { outputImg.style.display = 'none'; }
     }
 </script>
 
