@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPR SK Cherating (E-Sign)</title>
+    <title>OPR SK Cherating (Final Logo Fix)</title>
     <style>
         /* --- PAPARAN SKRIN (BORANG) --- */
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #dfe6e9; margin: 0; padding: 20px; }
@@ -40,9 +40,7 @@
         
         /* Input Upload */
         .file-sig-input { display: none; } /* Default hidden */
-        
         .clear-btn { background: #d63031; color: white; border: none; padding: 5px 10px; font-size: 11px; margin-top: 5px; border-radius: 3px; cursor: pointer; }
-
         .btn-jana { background: #00b894; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; margin-top: 30px; cursor: pointer; }
         .btn-jana:hover { background: #00a884; }
 
@@ -56,10 +54,20 @@
 
             #laporan-output { display: block !important; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-            /* Header */
+            /* Header Table - Fixed Logo Size */
             .header-table { width: 100%; border-bottom: 2px solid #000; margin-bottom: 10px; padding-bottom: 5px; }
             .header-table td { border: none !important; vertical-align: middle; }
-            .logo-img { height: 80px; width: auto; object-fit: contain; }
+            
+            /* LOGO SIZE FIX */
+            .logo-cell { width: 20%; text-align: center; } /* Memastikan kotak logo sama besar */
+            .logo-img { 
+                height: 90px; /* Tinggi Tetap untuk kedua-dua logo */
+                width: auto; 
+                max-width: 100%; 
+                object-fit: contain; /* Elak logo herot */
+                display: block;
+                margin: 0 auto; /* Center logo dalam kotak */
+            }
 
             /* Content */
             .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; }
@@ -75,7 +83,7 @@
             .signature-section { display: flex; justify-content: space-between; margin-top: 20px; font-family: Arial, sans-serif; font-size: 11pt; page-break-inside: avoid; }
             .sig-box { width: 45%; text-align: center; }
             
-            /* Lokasi Gambar Tandatangan (Antara 'Disediakan' dan Garisan) */
+            /* Lokasi Gambar Tandatangan */
             .sig-placeholder {
                 height: 60px; /* Ruang fix untuk sign */
                 display: flex; align-items: flex-end; justify-content: center;
@@ -90,11 +98,11 @@
 <body>
 
 <div class="container">
-    <h1>📝 OPR SK Cherating (E-Sign)</h1>
+    <h1>📝 OPR SK Cherating</h1>
     <div class="note">
         <strong>PENTING:</strong><br>
-        1. Fail Logo Sekolah: <strong>logo_sekolah.jpg</strong><br>
-        2. Anda boleh <strong>Lukis</strong> tandatangan guna jari atau <strong>Upload</strong> gambar.
+        1. Fail Logo: <strong>logo_sekolah.jpg</strong> & <strong>logo_ts25.png</strong><br>
+        2. Boleh <strong>Lukis</strong> atau <strong>Upload</strong> tandatangan.
     </div>
 
     <div class="section-title">1. Maklumat Program</div>
@@ -132,12 +140,10 @@
                 <button class="tab-btn active" onclick="switchTab('sedia', 'draw')">✍️ Lukis (Touch Screen)</button>
                 <button class="tab-btn" onclick="switchTab('sedia', 'upload')">📁 Upload Gambar</button>
             </div>
-            
             <div id="area-sedia-draw" style="display:block;">
                 <canvas id="canvas-sedia" class="sig-canvas" width="300" height="150" style="display:block;"></canvas>
                 <button class="clear-btn" onclick="clearCanvas('canvas-sedia')">Padam & Lukis Semula</button>
             </div>
-            
             <div id="area-sedia-upload" style="display:none; text-align:center; padding:10px;">
                 <input type="file" accept="image/*" id="file-sedia" onchange="handleFileSig(this, 'sedia')">
                 <img id="prev-file-sedia" style="height:50px; display:none; margin:5px auto; border:1px solid #ccc;">
@@ -155,12 +161,10 @@
                 <button class="tab-btn active" onclick="switchTab('sah', 'draw')">✍️ Lukis (Touch Screen)</button>
                 <button class="tab-btn" onclick="switchTab('sah', 'upload')">📁 Upload Gambar</button>
             </div>
-            
             <div id="area-sah-draw" style="display:block;">
                 <canvas id="canvas-sah" class="sig-canvas" width="300" height="150" style="display:block;"></canvas>
                 <button class="clear-btn" onclick="clearCanvas('canvas-sah')">Padam & Lukis Semula</button>
             </div>
-            
             <div id="area-sah-upload" style="display:none; text-align:center; padding:10px;">
                 <input type="file" accept="image/*" id="file-sah" onchange="handleFileSig(this, 'sah')">
                 <img id="prev-file-sah" style="height:50px; display:none; margin:5px auto; border:1px solid #ccc;">
@@ -174,14 +178,14 @@
 <div id="laporan-output">
     <table class="header-table">
         <tr>
-            <td style="width: 20%; text-align: left;">
+            <td class="logo-cell">
                 <img src="logo_ts25.png" class="logo-img" alt="TS25" onerror="this.style.display='none'">
             </td>
             <td style="text-align: center;">
                 <h2 style="margin:0; font-size:16pt; text-transform:uppercase;">LAPORAN ONE PAGE REPORT</h2>
                 <h3 style="margin:5px 0 0 0; font-size:14pt;">SK CHERATING</h3>
             </td>
-            <td style="width: 20%; text-align: right;">
+            <td class="logo-cell">
                 <img src="logo_sekolah.jpg" class="logo-img" alt="Sekolah" onerror="this.style.display='none'">
             </td>
         </tr>
@@ -243,23 +247,20 @@
         canvas.addEventListener("mouseup", function() { drawing = false; });
         canvas.addEventListener("mousemove", function(e) { if(drawing) { ctx.lineTo(getPos(e).x, getPos(e).y); ctx.stroke(); } });
 
-        // Touch Events (Mobile)
+        // Touch Events
         canvas.addEventListener("touchstart", function(e) { 
-            e.preventDefault(); // Elak scroll
-            drawing = true; 
+            e.preventDefault(); drawing = true; 
             var touch = e.touches[0];
             var mouseEvent = new MouseEvent("mousedown", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
         });
         canvas.addEventListener("touchend", function() { drawing = false; });
         canvas.addEventListener("touchmove", function(e) {
-            e.preventDefault();
-            var touch = e.touches[0];
+            e.preventDefault(); var touch = e.touches[0];
             var mouseEvent = new MouseEvent("mousemove", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
         });
 
-        // Helper Position
         function getPos(e) {
             var rect = canvas.getBoundingClientRect();
             return { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -275,18 +276,13 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // --- 2. FUNGSI TAB & UPLOAD ---
-    var sigMode = { sedia: 'draw', sah: 'draw' }; // Default mode
+    // --- 2. LOGIC SWITCH TABS ---
+    var sigMode = { sedia: 'draw', sah: 'draw' };
 
     function switchTab(role, mode) {
         sigMode[role] = mode;
-        // Tunjuk UI betul
         document.getElementById('area-'+role+'-draw').style.display = (mode === 'draw') ? 'block' : 'none';
         document.getElementById('area-'+role+'-upload').style.display = (mode === 'upload') ? 'block' : 'none';
-        
-        // Update butang active
-        var buttons = document.querySelectorAll('.sign-tabs button'); // Ini simple logic
-        // (Tak perlu perfect UI active state untuk functional code, asalkan display bertukar)
     }
 
     function handleFileSig(input, role) {
@@ -301,7 +297,7 @@
         }
     }
 
-    // --- 3. GAMBAR LAPORAN PREVIEW ---
+    // --- 3. LOGIC PREVIEW GAMBAR ---
     function preview(input, index) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -316,17 +312,14 @@
 
     // --- 4. CETAK PDF ---
     function cetakPDF() {
-        // Pindah Data Teks
         var fields = ['nama', 'anjuran', 'tarikh', 'masa', 'tempat', 'sasaran', 'objektif', 'aktiviti', 'kekuatan', 'kelemahan'];
         fields.forEach(id => { document.getElementById('out_' + id).innerText = document.getElementById('in_' + id).value; });
 
-        // Nama & Jawatan
         document.getElementById('out_sedia_nama').innerText = "(" + (document.getElementById('in_sedia_nama').value || "                     ") + ")";
         document.getElementById('out_sedia_jawatan').innerText = document.getElementById('in_sedia_jawatan').value;
         document.getElementById('out_sah_nama').innerText = "(" + (document.getElementById('in_sah_nama').value || "                     ") + ")";
         document.getElementById('out_sah_jawatan').innerText = document.getElementById('in_sah_jawatan').value;
 
-        // PROSES TANDATANGAN (PENTING!)
         processSignature('sedia');
         processSignature('sah');
 
@@ -336,23 +329,14 @@
     function processSignature(role) {
         var outputImg = document.getElementById('out_sig_img_' + role);
         var finalSrc = "";
-
         if (sigMode[role] === 'draw') {
-            // Check kalau canvas kosong (simple check)
             var canvas = document.getElementById('canvas-' + role);
-            // Kita assume user dah lukis kalau mode draw.
-            // Ambil data URL
             finalSrc = canvas.toDataURL();
-            // Note: Kalau canvas kosong putih bersih, dia still ada dataURL, tapi takpe.
         } else {
-            // Mode Upload
             var prevFile = document.getElementById('prev-file-' + role);
-            if (prevFile.src && prevFile.style.display !== 'none') {
-                finalSrc = prevFile.src;
-            }
+            if (prevFile.src && prevFile.style.display !== 'none') finalSrc = prevFile.src;
         }
-
-        if (finalSrc && finalSrc !== window.location.href) { // Basic check valid src
+        if (finalSrc && finalSrc !== window.location.href) {
             outputImg.src = finalSrc;
             outputImg.style.display = 'block';
         } else {
