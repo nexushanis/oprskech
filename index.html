@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPR SK Cherating (2.7cm Margin)</title>
+    <title>OPR SK Cherating (Margin 1cm)</title>
     <style>
         /* --- PAPARAN SKRIN (BORANG INPUT) --- */
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #dfe6e9; margin: 0; padding: 20px; }
@@ -41,8 +41,7 @@
         @media print {
             @page { 
                 size: A4 portrait; 
-                /* Top/Bottom: 10mm, Left/Right: 27mm (2.7cm) */
-                margin: 10mm 27mm; 
+                margin: 10mm; /* KEMBALI KE 1CM (10MM) */
             } 
             
             html, body { margin: 0; padding: 0; background: white; height: 99%; overflow: hidden; } 
@@ -56,19 +55,19 @@
             
             .logo-cell { width: 20%; text-align: center; }
             
-            /* LOGO SIZING (UPDATED) */
+            /* LOGO SIZING (TS25 70px, Sekolah 90px) */
             .logo-img-school { 
-                height: 90px; /* Logo Sekolah Kekal */
+                height: 90px; 
                 width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
             }
             .logo-img-ts25 { 
-                height: 70px; /* LOGO TS25 DIKECILKAN KE 70PX */
+                height: 70px; 
                 width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
             }
 
             /* CONTENT TABLE */
-            /* Font size dikurangkan ke 10pt sebab margin tepi luas (2.7cm) */
-            .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10pt; } 
+            /* Font size dikembalikan ke 10.5pt (Standard) */
+            .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10.5pt; } 
             .content-table td { 
                 border: 1px solid black; 
                 padding: 4px 6px; 
@@ -78,10 +77,9 @@
             .label-col { background-color: #f0f0f0 !important; font-weight: bold; width: 22%; -webkit-print-color-adjust: exact; }
 
             /* IMAGES */
-            /* Tinggi dikurangkan ke 135px untuk pastikan muat 1 page */
             .pdf-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
             .pdf-img-box { 
-                height: 135px; 
+                height: 140px; 
                 border: 1px solid #000; display: flex; align-items: center; justify-content: center; background: #fff; overflow: hidden; 
             }
             .pdf-img-box img { width: 100%; height: 100%; object-fit: cover; }
@@ -90,12 +88,12 @@
             .signature-section { 
                 display: flex; justify-content: space-between; 
                 margin-top: 20px; 
-                font-family: Arial, sans-serif; font-size: 10pt; page-break-inside: avoid; 
+                font-family: Arial, sans-serif; font-size: 10.5pt; page-break-inside: avoid; 
             }
-            .sig-box { width: 48%; text-align: center; } /* Lebar box ditambah sikit sebab margin luas */
+            .sig-box { width: 45%; text-align: center; }
             
             .sig-placeholder {
-                height: 50px; /* Ruang sign */
+                height: 55px; /* Ruang sign */
                 display: flex; align-items: flex-end; justify-content: center;
                 margin-bottom: 0px;
             }
@@ -112,8 +110,7 @@
     <div class="note">
         <strong>PENTING:</strong><br>
         1. Fail Logo: <strong>logo_sekolah.jpg</strong> & <strong>logo_ts25.png</strong><br>
-        2. Set Print Scale: <strong>Default (100%)</strong>.<br>
-        3. Margin 2.7cm telah disetkan automatik.
+        2. Set Print Scale: <strong>Default (100%)</strong>.
     </div>
 
     <div class="section-title">1. Maklumat Program</div>
@@ -236,7 +233,7 @@
 </div>
 
 <script>
-    // JS Logic sama seperti sebelum ini
+    // JS Logic
     function setupCanvas(canvasId) {
         var canvas = document.getElementById(canvasId);
         var ctx = canvas.getContext("2d");
