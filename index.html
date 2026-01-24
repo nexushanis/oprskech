@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPR SK Cherating (Margin 1cm A4 Fit)</title>
+    <title>OPR SK Cherating (No Crop)</title>
     <style>
         /* --- PAPARAN SKRIN (BORANG INPUT) --- */
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #dfe6e9; margin: 0; padding: 20px; }
@@ -18,10 +18,11 @@
         
         .section-title { margin-top: 25px; padding-bottom: 5px; border-bottom: 2px solid #0984e3; font-weight: bold; color: #0984e3; font-size: 16px; }
 
-        /* Grid Gambar */
+        /* Grid Gambar Upload */
         .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         .upload-box { border: 2px dashed #b2bec3; padding: 5px; text-align: center; background: #f5f6fa; border-radius: 5px; }
         .upload-box input { font-size: 10px; width: 100%; }
+        /* Preview di borang (tetap cover supaya nampak kemas di input) */
         .upload-box img { width: 100%; height: 60px; object-fit: cover; display: none; margin-top: 5px; border: 1px solid #ddd; }
 
         /* Signature UI */
@@ -41,7 +42,7 @@
         @media print {
             @page { 
                 size: A4 portrait; 
-                margin: 10mm; /* Margin 1CM (Standard A4) */
+                margin: 10mm; /* Margin 1CM */
             } 
             
             html, body { margin: 0; padding: 0; background: white; height: 99%; overflow: hidden; } 
@@ -55,7 +56,6 @@
             
             .logo-cell { width: 20%; text-align: center; }
             
-            /* LOGO SIZING (TS25=70px, Sekolah=90px) */
             .logo-img-school { 
                 height: 90px; 
                 width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
@@ -66,7 +66,6 @@
             }
 
             /* CONTENT TABLE */
-            /* Font 11pt selesa dibaca pada margin 1cm */
             .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; } 
             .content-table td { 
                 border: 1px solid black; 
@@ -76,14 +75,24 @@
             }
             .label-col { background-color: #f0f0f0 !important; font-weight: bold; width: 22%; -webkit-print-color-adjust: exact; }
 
-            /* IMAGES */
-            /* Tinggi 150px sesuai untuk margin 1cm */
+            /* IMAGES SECTION */
             .pdf-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
+            
             .pdf-img-box { 
                 height: 150px; 
-                border: 1px solid #000; display: flex; align-items: center; justify-content: center; background: #fff; overflow: hidden; 
+                border: 1px solid #000; 
+                display: flex; align-items: center; justify-content: center; 
+                background: #fff; 
+                overflow: hidden; 
             }
-            .pdf-img-box img { width: 100%; height: 100%; object-fit: cover; }
+            
+            /* --- INI BAHAGIAN UTAMA YANG DIUBAH --- */
+            /* object-fit: contain = Pastikan keseluruhan gambar masuk dalam kotak tanpa crop */
+            .pdf-img-box img { 
+                width: 100%; 
+                height: 100%; 
+                object-fit: contain; 
+            }
 
             /* SIGNATURE SECTION */
             .signature-section { 
@@ -93,7 +102,6 @@
             }
             .sig-box { width: 45%; text-align: center; }
             
-            /* Ruang Sign */
             .sig-placeholder {
                 height: 55px; 
                 display: flex; align-items: flex-end; justify-content: center;
