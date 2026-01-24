@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPR SK Cherating (No Crop)</title>
+    <title>OPR SK Cherating (Fill Box)</title>
     <style>
         /* --- PAPARAN SKRIN (BORANG INPUT) --- */
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #dfe6e9; margin: 0; padding: 20px; }
@@ -22,7 +22,7 @@
         .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         .upload-box { border: 2px dashed #b2bec3; padding: 5px; text-align: center; background: #f5f6fa; border-radius: 5px; }
         .upload-box input { font-size: 10px; width: 100%; }
-        /* Preview di borang (tetap cover supaya nampak kemas di input) */
+        /* Preview di borang kekal cover supaya cantik */
         .upload-box img { width: 100%; height: 60px; object-fit: cover; display: none; margin-top: 5px; border: 1px solid #ddd; }
 
         /* Signature UI */
@@ -56,23 +56,12 @@
             
             .logo-cell { width: 20%; text-align: center; }
             
-            .logo-img-school { 
-                height: 90px; 
-                width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
-            }
-            .logo-img-ts25 { 
-                height: 70px; 
-                width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; 
-            }
+            .logo-img-school { height: 90px; width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; }
+            .logo-img-ts25 { height: 70px; width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; }
 
             /* CONTENT TABLE */
             .content-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; } 
-            .content-table td { 
-                border: 1px solid black; 
-                padding: 5px 6px; 
-                vertical-align: top; 
-                line-height: 1.3; 
-            }
+            .content-table td { border: 1px solid black; padding: 5px 6px; vertical-align: top; line-height: 1.3; }
             .label-col { background-color: #f0f0f0 !important; font-weight: bold; width: 22%; -webkit-print-color-adjust: exact; }
 
             /* IMAGES SECTION */
@@ -86,27 +75,18 @@
                 overflow: hidden; 
             }
             
-            /* --- INI BAHAGIAN UTAMA YANG DIUBAH --- */
-            /* object-fit: contain = Pastikan keseluruhan gambar masuk dalam kotak tanpa crop */
+            /* --- UPDATE UTAMA: FILL --- */
             .pdf-img-box img { 
                 width: 100%; 
                 height: 100%; 
-                object-fit: contain; 
+                object-fit: fill; /* Memaksa gambar penuh kotak walau sedikit distortion */
             }
 
             /* SIGNATURE SECTION */
-            .signature-section { 
-                display: flex; justify-content: space-between; 
-                margin-top: 20px; 
-                font-family: Arial, sans-serif; font-size: 11pt; page-break-inside: avoid; 
-            }
+            .signature-section { display: flex; justify-content: space-between; margin-top: 20px; font-family: Arial, sans-serif; font-size: 11pt; page-break-inside: avoid; }
             .sig-box { width: 45%; text-align: center; }
             
-            .sig-placeholder {
-                height: 55px; 
-                display: flex; align-items: flex-end; justify-content: center;
-                margin-bottom: 0px;
-            }
+            .sig-placeholder { height: 55px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 0px; }
             .sig-img-final { max-height: 50px; max-width: 140px; display: none; }
 
             .sig-line { margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #000; }
